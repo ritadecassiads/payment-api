@@ -17,30 +17,30 @@ import lombok.AllArgsConstructor;
 @RestController
 @AllArgsConstructor
 public class AccountController {
-	
+
 	private final AccountService accountService;
-	
+
 	@GetMapping("/balance")
 	public ResponseEntity<Integer> getBalance(@RequestParam("account_id") String accountId) {
 		Integer balance = this.accountService.getBalance(accountId);
-		
-		if(balance == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0);
-		} 
-		
-		return ResponseEntity.ok(balance);
+
+		return balance == null ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(0) : ResponseEntity.ok(balance);
 	}
-	
-	@PostMapping("/reset") 
-	public ResponseEntity<Void> resetAccounts() {
-		 this.accountService.resetAccounts();
-		 return ResponseEntity.ok().build();
+
+	@PostMapping("/reset")
+	public ResponseEntity<String> resetAccounts() {
+		this.accountService.resetAccounts();
+		return ResponseEntity.ok("OK");
 	}
-	
+
 	@PostMapping("/event")
-	public ResponseEntity<EventResponseDTO> processEvent(@RequestBody EventRequestDTO event) {
+	public ResponseEntity<?> processEvent(@RequestBody EventRequestDTO event) {
 		EventResponseDTO response = accountService.processEvent(event);
-		return ResponseEntity.status(HttpStatus.CREATED).body(response);		
+		
+		return response == null ? 
+				ResponseEntity.status(HttpStatus.NOT_FOUND).body(0) : 
+					ResponseEntity.status(HttpStatus.CREATED).body(response);
+			
 	}
 
 }
