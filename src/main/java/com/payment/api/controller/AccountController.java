@@ -29,8 +29,9 @@ public class AccountController {
 	}
 	
 	@PostMapping("/reset")
-	public void resetAccounts() {
-		
+	public ResponseEntity<Void> resetAccounts() {
+		 accountService.resetAccounts();
+		 return ResponseEntity.ok().build();
 	}
 	
 	@PostMapping("/event")

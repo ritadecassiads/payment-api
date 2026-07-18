@@ -17,4 +17,8 @@ public class AccountService {
 		
 		return account == null ? null : account.getBalance();
 	}
+	
+	public void resetAccounts() {
+		accountRepository.resetAccounts();
+	}
 }
