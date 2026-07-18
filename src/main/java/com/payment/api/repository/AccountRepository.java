@@ -16,7 +16,7 @@ public class AccountRepository {
 	}
 	
 	public void saveAccount(Account account) {
-		accounts.put(account.getAccountId(), account);
+		accounts.put(account.getId(), account);
 	}
 	
 	public void resetAccounts() {

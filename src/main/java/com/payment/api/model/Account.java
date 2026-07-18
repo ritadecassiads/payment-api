@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Account {
-	private String accountId;
+	private String id;
 	private Integer balance;
 }
