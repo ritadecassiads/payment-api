@@ -4,9 +4,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.payment.api.dto.EventRequestDTO;
+import com.payment.api.dto.EventResponseDTO;
 import com.payment.api.service.AccountService;
 
 import lombok.AllArgsConstructor;
@@ -28,15 +31,16 @@ public class AccountController {
 		return ResponseEntity.ok(balance);
 	}
 	
-	@PostMapping("/reset")
+	@PostMapping("/reset") 
 	public ResponseEntity<Void> resetAccounts() {
-		 accountService.resetAccounts();
+		 this.accountService.resetAccounts();
 		 return ResponseEntity.ok().build();
 	}
 	
 	@PostMapping("/event")
-	public void processEvent() {
-		
+	public ResponseEntity<EventResponseDTO> processEvent(@RequestBody EventRequestDTO event) {
+		EventResponseDTO response = accountService.processEvent(event);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);		
 	}
 
 }

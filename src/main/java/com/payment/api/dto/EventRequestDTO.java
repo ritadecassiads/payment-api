@@ -1,6 +1,15 @@
 package com.payment.api.dto;
 
-public class EventRequestDTO {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-	//{"type":"transfer", "origin":"100", "amount":15, "destination":"300"}
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class EventRequestDTO {
+	private String type;
+	private String origin;
+	private String destination;
+	private Integer amount;
 }
