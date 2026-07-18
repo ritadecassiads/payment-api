@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.payment.api.dto.EventRequestDTO;
 import com.payment.api.dto.EventResponseDTO;
+import com.payment.api.exception.InsufficientBalanceException;
 import com.payment.api.model.Account;
 import com.payment.api.repository.AccountRepository;
 
@@ -55,7 +56,7 @@ public class AccountService {
 		}
 
 		if (account.getBalance() < eventRequest.getAmount()) {
-			throw new IllegalStateException("Insufficient balance");
+			throw new InsufficientBalanceException();
 		}
 
 		account.setBalance(account.getBalance() - eventRequest.getAmount());
@@ -73,7 +74,7 @@ public class AccountService {
 		}
 
 		if (origin.getBalance() < eventRequest.getAmount()) {
-			throw new IllegalStateException("Insufficient balance");
+			throw new InsufficientBalanceException();
 		}
 
 		Account destination = accountRepository.findById(eventRequest.getDestination());
