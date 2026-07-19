@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Account {
 	private String id;
-	private Integer balance;
+	private long balance;
 }

@@ -12,17 +12,17 @@ import com.payment.api.dto.EventRequestDTO;
 import com.payment.api.dto.EventResponseDTO;
 import com.payment.api.service.AccountService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AccountController {
 
 	private final AccountService accountService;
 
 	@GetMapping("/balance")
-	public ResponseEntity<Integer> getBalance(@RequestParam("account_id") String accountId) {
-		Integer balance = this.accountService.getBalance(accountId);
+	public ResponseEntity<?> getBalance(@RequestParam("account_id") String accountId) {
+		Long balance = this.accountService.getBalance(accountId);
 
 		return balance == null ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(0) : ResponseEntity.ok(balance);
 	}

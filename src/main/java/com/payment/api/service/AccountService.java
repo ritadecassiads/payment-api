@@ -8,20 +8,20 @@ import com.payment.api.exception.InsufficientBalanceException;
 import com.payment.api.model.Account;
 import com.payment.api.repository.AccountRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AccountService {
 	private final AccountRepository accountRepository;
 
-	public synchronized Integer getBalance(String accountId) {
-		Account account = accountRepository.findById(accountId);
+	public synchronized Long getBalance(String accountId) {
+		Account account = getAccount(accountId);
 
 		return account == null ? null : account.getBalance();
 	}
 
-	public synchronized  void resetAccounts() {
+	public synchronized void resetAccounts() {
 		accountRepository.resetAccounts();
 	}
 
@@ -35,7 +35,7 @@ public class AccountService {
 	}
 
 	private EventResponseDTO processDeposit(EventRequestDTO eventRequest) {
-		Account account = accountRepository.findById(eventRequest.getDestination());
+		Account account = getAccount(eventRequest.getDestination());
 
 		if (account == null) {
 			account = new Account(eventRequest.getDestination(), eventRequest.getAmount());
@@ -49,7 +49,7 @@ public class AccountService {
 	}
 
 	private EventResponseDTO processWithdraw(EventRequestDTO eventRequest) {
-		Account account = accountRepository.findById(eventRequest.getOrigin());
+		Account account = getAccount(eventRequest.getOrigin());
 
 		if (account == null) {
 			return null;
@@ -67,8 +67,8 @@ public class AccountService {
 	}
 
 	private EventResponseDTO processTransfer(EventRequestDTO eventRequest) {
-		Account origin = accountRepository.findById(eventRequest.getOrigin());
-		
+		Account origin = getAccount(eventRequest.getOrigin());
+
 		if (origin == null) {
 			return null;
 		}
@@ -77,8 +77,8 @@ public class AccountService {
 			throw new InsufficientBalanceException();
 		}
 
-		Account destination = accountRepository.findById(eventRequest.getDestination());
-		
+		Account destination = getAccount(eventRequest.getDestination());
+
 		if (destination == null) {
 			destination = new Account(eventRequest.getDestination(), 0);
 		}
@@ -90,6 +90,10 @@ public class AccountService {
 		accountRepository.saveAccount(destination);
 
 		return new EventResponseDTO(origin, destination);
+	}
+
+	private Account getAccount(String id) {
+		return accountRepository.findById(id);
 	}
 
 }
